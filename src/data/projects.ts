@@ -43,9 +43,9 @@ export const SITE = {
   title: "Full-Stack Developer",
   tagline: "Web · Mobile · UI/UX",
   location: "Toronto",
-  email: "tyler.wu@example.com",
-  github: "https://github.com/tylerwu",
-  linkedin: "https://linkedin.com/in/tylerwu",
+  email: "tylerwu.design@gmail.com",
+  github: "https://github.com/tylerwu-dev",
+  linkedin: "https://www.linkedin.com/in/tianle-wu-06396a339/",
   resumeUrl: "/Tianle_(Tyler)_Wu_Resume.pdf",
 } as const
 
