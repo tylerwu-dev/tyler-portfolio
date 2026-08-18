@@ -1,5 +1,6 @@
 import { motion } from "framer-motion"
 import { SITE } from "../data/projects"
+import { assetPath } from "../utils/assetPath"
 import { fadeUp, staggerContainer } from "./SectionWrapper"
 
 export default function Hero() {
@@ -54,7 +55,7 @@ export default function Hero() {
         >
           <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
             <img
-              src="/images/profile.jpg"
+              src={assetPath("/images/profile.jpg")}
               alt="Tyler Wu portrait"
               className="aspect-[3/4] w-full object-cover object-[center_20%] md:aspect-[2/3] md:object-[center_18%]"
             />
