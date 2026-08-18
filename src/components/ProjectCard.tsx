@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import type { Project } from "../data/projects"
+import { assetPath } from "../utils/assetPath"
 
 interface ProjectCardProps {
   project: Project
@@ -20,7 +21,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <div className="relative aspect-[16/10] overflow-hidden">
         {hasImage ? (
           <motion.img
-            src={project.image}
+            src={assetPath(project.image)}
             alt={project.title}
             className="h-full w-full object-cover"
             whileHover={{ scale: 1.04 }}

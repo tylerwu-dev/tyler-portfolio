@@ -1,4 +1,5 @@
 import { SITE } from "../data/projects"
+import { assetPath } from "../utils/assetPath"
 
 const footerLinks = [
   { label: "GitHub", href: SITE.github, external: true },
@@ -17,7 +18,7 @@ export default function Footer() {
           {footerLinks.map((link) => (
             <a
               key={link.label}
-              href={link.href}
+              href={assetPath(link.href)}
               target={link.external ? "_blank" : undefined}
               rel={link.external ? "noopener noreferrer" : undefined}
               className="text-sm text-text-secondary transition-colors hover:text-text-primary"

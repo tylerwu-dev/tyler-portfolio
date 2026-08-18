@@ -19,5 +19,8 @@ function githubPagesSpaFallback() {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), githubPagesSpaFallback()],
-  base: process.env.GITHUB_ACTIONS ? "/tyler-portfolio/" : "/",
+  base:
+    process.env.GITHUB_ACTIONS === "true" || process.env.GITHUB_PAGES === "true"
+      ? "/tyler-portfolio/"
+      : "/",
 })

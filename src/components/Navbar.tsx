@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { SITE } from "../data/projects"
+import { assetPath } from "../utils/assetPath"
 
 const sectionLinks = [
   { label: "Projects", href: "#projects" },
@@ -51,7 +52,7 @@ export default function Navbar() {
             </button>
           ))}
           <a
-            href={SITE.resumeUrl}
+            href={assetPath(SITE.resumeUrl)}
             target="_blank"
             rel="noopener noreferrer"
             className={linkClass}
@@ -97,7 +98,7 @@ export default function Navbar() {
                 </button>
               ))}
               <a
-                href={SITE.resumeUrl}
+                href={assetPath(SITE.resumeUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`text-left ${linkClass}`}

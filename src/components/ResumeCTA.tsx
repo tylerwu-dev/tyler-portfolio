@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { SITE } from "../data/projects"
 import SectionWrapper from "./SectionWrapper"
 import { fadeUp } from "./SectionWrapper"
+import { assetPath } from "../utils/assetPath"
 
 export default function ResumeCTA() {
   return (
@@ -23,7 +24,7 @@ export default function ResumeCTA() {
             </p>
           </div>
           <a
-            href={SITE.resumeUrl}
+            href={assetPath(SITE.resumeUrl)}
             target="_blank"
             rel="noopener noreferrer"
             className="shrink-0 text-sm font-medium text-accent transition-colors hover:text-accent-hover"

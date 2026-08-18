@@ -4,6 +4,7 @@ import { getProjectBySlug, getAdjacentProjects } from "../data/projects"
 import { fadeUp } from "../components/SectionWrapper"
 import Footer from "../components/Footer"
 import ScreenshotGrid from "../components/ScreenshotGrid"
+import { assetPath } from "../utils/assetPath"
 
 function CaseStudySection({
   title,
@@ -90,7 +91,7 @@ export default function ProjectDetail() {
           <div className="mb-8 aspect-[16/9] overflow-hidden rounded-2xl border border-border shadow-sm">
             {hasImage ? (
               <img
-                src={project.image}
+                src={assetPath(project.image)}
                 alt={project.title}
                 className="h-full w-full object-cover"
               />

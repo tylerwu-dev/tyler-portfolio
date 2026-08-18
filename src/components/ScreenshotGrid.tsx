@@ -1,6 +1,7 @@
 import { useState } from "react"
 import type { ProjectScreenshot } from "../data/projects"
 import MobileDeviceFrame from "./MobileDeviceFrame"
+import { assetPath } from "../utils/assetPath"
 
 interface ScreenshotGridProps {
   screenshots: ProjectScreenshot[]
@@ -73,20 +74,20 @@ function ScreenshotCard({
       {hasImage ? (
         variant === "mobile" && useDeviceFrame ? (
           <MobileDeviceFrame
-            src={shot.image}
+            src={assetPath(shot.image)}
             alt={shot.title}
             onError={() => setFailed(true)}
           />
         ) : variant === "mobile" ? (
           <img
-            src={shot.image}
+            src={assetPath(shot.image)}
             alt={shot.title}
             className="mx-auto h-auto w-full max-w-[360px] rounded-2xl object-contain"
             onError={() => setFailed(true)}
           />
         ) : (
           <img
-            src={shot.image}
+            src={assetPath(shot.image)}
             alt={shot.title}
             className="mx-auto block h-auto w-full rounded-2xl object-contain"
             onError={() => setFailed(true)}

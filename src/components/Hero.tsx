@@ -37,7 +37,7 @@ export default function Hero() {
               View Projects
             </button>
             <a
-              href={SITE.resumeUrl}
+              href={assetPath(SITE.resumeUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full border border-border bg-surface px-6 py-3 text-sm font-medium text-text-primary transition-colors hover:border-accent/30 hover:bg-accent/5"

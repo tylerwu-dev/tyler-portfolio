@@ -1,5 +1,3 @@
-import { assetPath } from "../utils/assetPath"
-
 export interface ProjectLinks {
   caseStudy: string
   github?: string
@@ -48,10 +46,10 @@ export const SITE = {
   email: "tylerwu.design@gmail.com",
   github: "https://github.com/tylerwu-dev",
   linkedin: "https://www.linkedin.com/in/tianle-wu-06396a339/",
-  resumeUrl: assetPath("/Tianle_(Tyler)_Wu_Resume.pdf"),
+  resumeUrl: "/Tianle_(Tyler)_Wu_Resume.pdf",
 } as const
 
-const projectData: Project[] = [
+export const projects: Project[] = [
   {
     id: "1",
     slug: "bookapro",
@@ -726,15 +724,6 @@ const projectData: Project[] = [
     },
   },
 ]
-
-export const projects: Project[] = projectData.map((project) => ({
-  ...project,
-  image: assetPath(project.image),
-  screenshots: project.screenshots.map((shot) => ({
-    ...shot,
-    image: assetPath(shot.image),
-  })),
-}))
 
 export const skillCategories = [
   {
