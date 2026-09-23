@@ -8,6 +8,7 @@ import { staggerContainer, fadeUp } from "./SectionWrapper"
 const HOMEPAGE_ORDER = [
   "bookapro",
   "ask-mirra",
+  "rezo",
   "easyrent",
   "carshare",
   "snowball",

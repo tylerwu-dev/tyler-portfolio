@@ -6,9 +6,43 @@ import { assetPath } from "../utils/assetPath"
 interface ScreenshotGridProps {
   screenshots: ProjectScreenshot[]
   variant?: "mobile" | "web"
+  layout?: "grid" | "featured"
   projectSlug?: string
   title?: string
   subtitle?: string
+  liveUrl?: string
+}
+
+function screenshotAlt(shot: ProjectScreenshot, fallback: string) {
+  return shot.description != null ? `${shot.title} — ${shot.description}` : fallback
+}
+
+function ScrollHint() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-1 bg-gradient-to-t from-white/90 via-white/55 to-transparent px-3 pt-10 pb-3"
+      aria-hidden="true"
+    >
+      <span className="text-[11px] font-medium tracking-wide text-text-secondary/80">
+        Scroll to explore
+      </span>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+        className="text-text-secondary/55"
+      >
+        <path
+          d="M2.5 4.5L6 8L9.5 4.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  )
 }
 
 function ScreenshotPlaceholder({
@@ -57,28 +91,101 @@ function ScreenshotPlaceholder({
   )
 }
 
+function ScrollableDesktopPreview({
+  shot,
+  onError,
+}: {
+  shot: ProjectScreenshot
+  onError: () => void
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+      <div
+        className="screenshot-scroll h-[min(52vh,480px)] max-h-[520px] overflow-y-auto overscroll-contain outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 sm:h-[480px]"
+        tabIndex={0}
+        role="region"
+        aria-label={`${shot.title} scrollable preview. Use arrow keys or scroll to explore.`}
+      >
+        <img
+          src={assetPath(shot.image)}
+          alt={screenshotAlt(shot, `${shot.title} desktop screenshot`)}
+          className="block h-auto w-full max-w-full align-top"
+          onError={onError}
+        />
+      </div>
+      <ScrollHint />
+    </div>
+  )
+}
+
+function ScrollableMobilePreview({
+  shot,
+  onError,
+}: {
+  shot: ProjectScreenshot
+  onError: () => void
+}) {
+  return (
+    <div className="mx-auto w-full max-w-[360px]">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div
+          className="screenshot-scroll h-[min(70vh,680px)] max-h-[720px] overflow-y-auto overscroll-contain outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 sm:h-[680px]"
+          tabIndex={0}
+          role="region"
+          aria-label={`${shot.title} scrollable preview. Use arrow keys or scroll to explore.`}
+        >
+          <img
+            src={assetPath(shot.image)}
+            alt={screenshotAlt(shot, `${shot.title} mobile homepage screenshot`)}
+            className="block h-auto w-full max-w-full"
+            onError={onError}
+          />
+        </div>
+        <ScrollHint />
+      </div>
+    </div>
+  )
+}
+
 function ScreenshotCard({
   shot,
   variant,
   useDeviceFrame,
+  align = "start",
+  imageClassName,
 }: {
   shot: ProjectScreenshot
   variant: "mobile" | "web"
   useDeviceFrame: boolean
+  align?: "start" | "center"
+  imageClassName?: string
 }) {
   const [failed, setFailed] = useState(false)
   const hasImage = Boolean(shot.image?.trim()) && !failed
+  const presentation = shot.presentation ?? "default"
+  const isScrollableMobile = presentation === "scrollable-mobile"
+  const isScrollableDesktop = presentation === "scrollable-desktop"
+  const captionAlign =
+    align === "center" ||
+    isScrollableMobile ||
+    (variant === "mobile" && !imageClassName)
+      ? "text-center"
+      : "text-left"
 
   return (
     <figure className="flex h-full flex-col">
       {hasImage ? (
-        variant === "mobile" && useDeviceFrame ? (
+        isScrollableMobile ? (
+          <ScrollableMobilePreview shot={shot} onError={() => setFailed(true)} />
+        ) : isScrollableDesktop ? (
+          <ScrollableDesktopPreview shot={shot} onError={() => setFailed(true)} />
+        ) : variant === "mobile" && useDeviceFrame ? (
           <MobileDeviceFrame
             src={assetPath(shot.image)}
             alt={shot.title}
             onError={() => setFailed(true)}
           />
-        ) : variant === "mobile" ? (
+        ) : variant === "mobile" && !imageClassName ? (
           <img
             src={assetPath(shot.image)}
             alt={shot.title}
@@ -88,22 +195,23 @@ function ScreenshotCard({
         ) : (
           <img
             src={assetPath(shot.image)}
-            alt={shot.title}
-            className="mx-auto block h-auto w-full rounded-2xl object-contain"
+            alt={screenshotAlt(shot, shot.title)}
+            className={
+              imageClassName ??
+              "mx-auto block h-auto w-full rounded-2xl object-contain"
+            }
             onError={() => setFailed(true)}
           />
         )
       ) : (
         <ScreenshotPlaceholder
           title={shot.title}
-          variant={variant}
-          useDeviceFrame={useDeviceFrame}
+          variant={isScrollableMobile ? "mobile" : variant}
+          useDeviceFrame={useDeviceFrame && !isScrollableMobile && !isScrollableDesktop}
         />
       )}
 
-      <figcaption
-        className={`mt-4 ${variant === "mobile" ? "text-center" : "text-left"}`}
-      >
+      <figcaption className={`mt-4 ${captionAlign}`}>
         <p className="text-sm font-medium text-text-primary sm:text-base">{shot.title}</p>
         {shot.description && (
           <p className="mt-1 text-sm text-text-secondary">{shot.description}</p>
@@ -113,12 +221,94 @@ function ScreenshotCard({
   )
 }
 
+function FeaturedLayout({
+  screenshots,
+  variant,
+  useDeviceFrame,
+  liveUrl,
+}: {
+  screenshots: ProjectScreenshot[]
+  variant: "mobile" | "web"
+  useDeviceFrame: boolean
+  liveUrl?: string
+}) {
+  const hero = screenshots.find((s) => (s.presentation ?? "default") === "default")
+  const desktopRow = screenshots.filter((s) => s.presentation === "scrollable-desktop")
+  const mobileShots = screenshots.filter((s) => s.presentation === "scrollable-mobile")
+  const used = new Set(
+    [hero, ...desktopRow, ...mobileShots].filter(Boolean).map((s) => s!.title),
+  )
+  const leftover = screenshots.filter((s) => !used.has(s.title))
+
+  return (
+    <div className="flex flex-col gap-10 md:gap-12">
+      {hero && (
+        <ScreenshotCard
+          shot={hero}
+          variant={variant}
+          useDeviceFrame={false}
+          imageClassName="block h-auto w-full rounded-2xl object-contain"
+        />
+      )}
+
+      {desktopRow.length > 0 && (
+        <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-8">
+          {desktopRow.map((shot) => (
+            <ScreenshotCard
+              key={shot.title}
+              shot={shot}
+              variant={variant}
+              useDeviceFrame={false}
+            />
+          ))}
+        </div>
+      )}
+
+      {mobileShots.map((shot) => (
+        <div key={shot.title} className="mx-auto w-full">
+          <ScreenshotCard
+            shot={shot}
+            variant={variant}
+            useDeviceFrame={false}
+            align="center"
+          />
+        </div>
+      ))}
+
+      {liveUrl && (
+        <div className="text-center">
+          <a
+            href={liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-accent hover:text-accent-hover"
+          >
+            Live Site →
+          </a>
+        </div>
+      )}
+
+      {leftover.map((shot) => (
+        <ScreenshotCard
+          key={shot.title}
+          shot={shot}
+          variant={variant}
+          useDeviceFrame={useDeviceFrame && variant === "mobile"}
+          imageClassName="block h-auto w-full rounded-2xl object-contain"
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function ScreenshotGrid({
   screenshots,
   variant = "mobile",
+  layout = "grid",
   projectSlug,
   title = "Screenshots",
   subtitle = "A closer look at the main screens and user flows.",
+  liveUrl,
 }: ScreenshotGridProps) {
   if (screenshots.length === 0) return null
 
@@ -131,22 +321,31 @@ export default function ScreenshotGrid({
         <p className="text-base text-text-secondary">{subtitle}</p>
       </div>
 
-      <div
-        className={
-          variant === "mobile"
-            ? "grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
-            : "grid grid-cols-1 gap-6 sm:grid-cols-2"
-        }
-      >
-        {screenshots.map((shot) => (
-          <ScreenshotCard
-            key={shot.title}
-            shot={shot}
-            variant={variant}
-            useDeviceFrame={useDeviceFrame}
-          />
-        ))}
-      </div>
+      {layout === "featured" ? (
+        <FeaturedLayout
+          screenshots={screenshots}
+          variant={variant}
+          useDeviceFrame={useDeviceFrame}
+          liveUrl={liveUrl}
+        />
+      ) : (
+        <div
+          className={
+            variant === "mobile"
+              ? "grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+              : "grid grid-cols-1 gap-6 sm:grid-cols-2"
+          }
+        >
+          {screenshots.map((shot) => (
+            <ScreenshotCard
+              key={shot.title}
+              shot={shot}
+              variant={variant}
+              useDeviceFrame={useDeviceFrame}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

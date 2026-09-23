@@ -2,12 +2,20 @@ export interface ProjectLinks {
   caseStudy: string
   github?: string
   live?: string
+  figma?: string
 }
 
 export interface ProjectScreenshot {
   title: string
   image: string
   description?: string
+  /** Fixed-height scrollable preview for tall screenshots */
+  presentation?: "default" | "scrollable-desktop" | "scrollable-mobile"
+}
+
+export interface DesignProcessArea {
+  title: string
+  description: string
 }
 
 export interface CaseStudySection {
@@ -17,6 +25,10 @@ export interface CaseStudySection {
   techStack: string[]
   keyFeatures: string[]
   technicalDecisions: string[]
+  designProcess?: {
+    intro: string | string[]
+    areas: DesignProcessArea[]
+  }
   challenges: { title?: string; challenge: string; solution: string }[]
   finalResult: string | string[]
 }
@@ -34,6 +46,7 @@ export interface Project {
   featured: boolean
   isDesignProject?: boolean
   screenshotVariant?: "mobile" | "web"
+  screenshotLayout?: "grid" | "featured"
   screenshots: ProjectScreenshot[]
   caseStudy: CaseStudySection
 }
@@ -307,6 +320,143 @@ export const projects: Project[] = [
         "Ask Mirra demonstrates my ability to build a full-stack AI web product with authentication, database logic, payment integration, responsive UI, and production deployment.",
         "The project gave me practical experience connecting AI generation with real product infrastructure, including user accounts, preview limits, Stripe Checkout, webhook-based balance updates, Firestore data management, and privacy-aware product planning.",
         "Unlike a simple AI prototype, Ask Mirra was built as a working MVP with a clear user flow and monetization structure.",
+      ],
+    },
+  },
+  {
+    id: "6",
+    slug: "rezo",
+    title: "REZO",
+    type: "E-commerce UI/UX & frontend",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "UI/UX"],
+    description:
+      "Designed and developed a premium pickleball storefront from brand system and responsive UI/UX through frontend implementation in Next.js.",
+    image: "/images/rezo-thumbnail.png",
+    links: {
+      caseStudy: "/projects/rezo",
+      live: "https://rezo-storefront.vercel.app/",
+      github: "https://github.com/tylerwu-dev/rezo-storefront",
+      figma:
+        "https://www.figma.com/design/58glmX00pFUepmAxCQHreD/REZO-Brand-System?node-id=33-72&t=yfat3NVZlxJs1SNh-1",
+    },
+    featured: true,
+    screenshotVariant: "web",
+    screenshotLayout: "featured",
+    screenshots: [
+      {
+        title: "Desktop Homepage",
+        image: "/images/projects/rezo/rezo-home-desktop.png",
+        description:
+          "Editorial homepage combining brand storytelling, featured products, lifestyle imagery, and a responsive commerce layout.",
+      },
+      {
+        title: "Product Detail Page",
+        image: "/images/projects/rezo/rezo-product-detail.png",
+        description:
+          "Responsive product layout, information hierarchy, product controls, and supporting brand content.",
+        presentation: "scrollable-desktop",
+      },
+      {
+        title: "Cart Drawer Interaction",
+        image: "/images/projects/rezo/rezo-cart-drawer.png",
+        description:
+          "Quantity controls, item removal, summary states, and preserved shopping context without leaving the page.",
+        presentation: "scrollable-desktop",
+      },
+      {
+        title: "Mobile Experience",
+        image: "/images/projects/rezo/rezo-home-mobile.png",
+        description:
+          "Responsive adaptation of the REZO storefront for smaller screens with preserved hierarchy, navigation, and brand expression.",
+        presentation: "scrollable-mobile",
+      },
+    ],
+    caseStudy: {
+      overview: [
+        "REZO is a premium, resort-inspired pickleball e-commerce storefront designed and developed from the ground up. The project combines brand direction, UI/UX design, responsive layouts, reusable interface patterns, and frontend implementation in Next.js.",
+        "The experience focuses on quiet luxury, editorial storytelling, and a refined shopping experience rather than a traditional performance-sports aesthetic.",
+        "The current version is a frontend prototype using local mock data. It is not connected to Shopify and does not include real checkout, so the focus stays on brand system, interface design, and storefront implementation.",
+      ],
+      role: [
+        "I worked as UI/UX Designer and Frontend Developer, handling both the design system and the Next.js implementation. That included creative direction, visual foundations, reusable components, responsive layouts, key commerce interactions, and translating the system into a working storefront.",
+        "The strongest outcome of this project is end-to-end design-to-development execution: moving from brand and UI foundations in Figma into a responsive, production-deployed frontend prototype.",
+      ],
+      techStack: [
+        "Next.js 16",
+        "React 19",
+        "TypeScript",
+        "Tailwind CSS v4",
+        "CSS variables / brand tokens",
+        "Vercel",
+        "Local mock data",
+      ],
+      keyFeatures: [
+        "Brand-led e-commerce homepage",
+        "Responsive desktop and mobile UI",
+        "Product Detail Page for the REZO Paddle",
+        "Cart Drawer UI",
+        "Search Overlay using a mock search index",
+        "Mobile navigation",
+        "Brand Story page",
+        "Support / FAQ / Contact page",
+        "Privacy, Terms, Refund, and Shipping policy templates",
+        "Reusable brand tokens and UI patterns",
+      ],
+      designProcess: {
+        intro:
+          "I designed REZO from the ground up, defining the creative direction, visual foundations, reusable components, responsive layouts, and key commerce interactions before translating the system into a Next.js storefront.",
+        areas: [
+          {
+            title: "Brand System",
+            description:
+              "Creative direction, visual language, color, typography, photography direction, and design principles for a calm, resort-inspired quiet-luxury brand.",
+          },
+          {
+            title: "UI System",
+            description:
+              "Foundations, reusable components, interface patterns, responsive behavior, and consistent brand tokens across the storefront.",
+          },
+          {
+            title: "Product Screens",
+            description:
+              "High-fidelity desktop and mobile layouts for homepage, product detail, cart drawer, search overlay, story, support, and legal page templates.",
+          },
+        ],
+      },
+      technicalDecisions: [
+        "Used Next.js 16, React 19, and TypeScript to implement a clean App Router storefront structure.",
+        "Used Tailwind CSS v4 with CSS-variable-based brand tokens to keep typography, color, spacing, and responsive behavior consistent.",
+        "Built reusable UI components so homepage, product, story, support, and policy templates share the same interface patterns.",
+        "Used local mock data for products and search so the frontend prototype can run without a commerce backend.",
+        "Structured the storefront so a commerce backend such as Shopify could be integrated later without redesigning the core UI.",
+        "Avoided an aggressive sports aesthetic in favor of a warm, editorial, timeless resort-inspired direction.",
+      ],
+      challenges: [
+        {
+          title: "Balancing brand storytelling with shopping clarity",
+          challenge:
+            "A premium brand experience can become overly editorial and make product discovery feel secondary.",
+          solution:
+            "I structured the homepage around clear commerce moments—featured product, equipment entry points, and product detail access—while keeping the visual tone calm and editorial.",
+        },
+        {
+          title: "Keeping a reusable UI system consistent",
+          challenge:
+            "As pages expanded across homepage, product detail, cart, search, story, support, and policies, visual inconsistency became a risk.",
+          solution:
+            "I defined reusable components and CSS-variable brand tokens early, then applied the same foundations across desktop and mobile layouts.",
+        },
+        {
+          title: "Building a prototype without a live commerce backend",
+          challenge:
+            "The storefront needed to feel complete enough to demonstrate shopping flows without Shopify, checkout, or live inventory.",
+          solution:
+            "I used local mock data for products and search, and designed the interface structure so a commerce backend could be integrated later.",
+        },
+      ],
+      finalResult: [
+        "REZO demonstrates end-to-end design-to-development execution: brand system, UI/UX, responsive storefront patterns, and Next.js frontend implementation.",
+        "The prototype shows a refined e-commerce experience with homepage storytelling, product detail, cart drawer, search overlay, brand story, support, and policy templates—built as a frontend foundation that could support future commerce backend integration.",
       ],
     },
   },

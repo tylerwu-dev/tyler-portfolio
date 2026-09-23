@@ -28,3 +28,23 @@ body {
 ::selection {
   background-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
+
+/* Thin / minimal scrollbar for nested screenshot previews */
+.screenshot-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-text-secondary) 35%, transparent)
+    transparent;
+}
+
+.screenshot-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.screenshot-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.screenshot-scroll::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--color-text-secondary) 35%, transparent);
+}

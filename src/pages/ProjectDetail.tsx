@@ -124,6 +124,16 @@ export default function ProjectDetail() {
                 {project.isDesignProject ? "Prototype →" : "Live Site →"}
               </a>
             )}
+            {project.links.figma && (
+              <a
+                href={project.links.figma}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-accent hover:text-accent-hover"
+              >
+                View Full Design System →
+              </a>
+            )}
           </div>
         </div>
 
@@ -162,8 +172,43 @@ export default function ProjectDetail() {
           <Paragraphs text={cs.role} />
         </CaseStudySection>
 
+        {cs.designProcess && (
+          <CaseStudySection title="From brand system to storefront">
+            <div className="space-y-6">
+              <Paragraphs text={cs.designProcess.intro} />
+              <div className="space-y-4">
+                {cs.designProcess.areas.map((area) => (
+                  <div
+                    key={area.title}
+                    className="rounded-xl border border-border bg-surface p-5"
+                  >
+                    <p className="mb-2 font-semibold text-text-primary">{area.title}</p>
+                    <p>{area.description}</p>
+                  </div>
+                ))}
+              </div>
+              {project.links.figma && (
+                <a
+                  href={project.links.figma}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-sm font-medium text-accent hover:text-accent-hover"
+                >
+                  View Full Design System →
+                </a>
+              )}
+            </div>
+          </CaseStudySection>
+        )}
+
         <CaseStudySection
-          title={project.isDesignProject ? "Design Decisions" : "Technical Decisions"}
+          title={
+            project.isDesignProject
+              ? "Design Decisions"
+              : cs.designProcess
+                ? "Development"
+                : "Technical Decisions"
+          }
         >
           <ul className="list-inside list-disc space-y-2">
             {cs.technicalDecisions.map((decision) => (
@@ -201,12 +246,24 @@ export default function ProjectDetail() {
           <ScreenshotGrid
             screenshots={project.screenshots}
             variant={project.screenshotVariant ?? "mobile"}
+            layout={project.screenshotLayout ?? "grid"}
             projectSlug={project.slug}
-            title={project.isDesignProject ? "Key UI Flows" : "Screenshots"}
+            liveUrl={
+              project.screenshotLayout === "featured" ? project.links.live : undefined
+            }
+            title={
+              project.screenshotLayout === "featured"
+                ? "Selected Screens"
+                : project.isDesignProject
+                  ? "Key UI Flows"
+                  : "Screenshots"
+            }
             subtitle={
-              project.isDesignProject
-                ? "A closer look at the main prototype screens and user flows."
-                : "A closer look at the main screens and user flows."
+              project.screenshotLayout === "featured"
+                ? "Key storefront screens showing brand direction, responsive UI, and core commerce interactions."
+                : project.isDesignProject
+                  ? "A closer look at the main prototype screens and user flows."
+                  : "A closer look at the main screens and user flows."
             }
           />
         </motion.section>
