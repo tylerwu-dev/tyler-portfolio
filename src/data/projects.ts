@@ -902,13 +902,31 @@ export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug)
 }
 
+/** Same sequence as the homepage project cards. */
+export const PROJECT_DISPLAY_ORDER = [
+  "bookapro",
+  "ask-mirra",
+  "rezo",
+  "snowball",
+  "easyrent",
+  "carshare",
+] as const
+
 export function getAdjacentProjects(slug: string): {
   prev: Project | null
   next: Project | null
 } {
-  const index = projects.findIndex((p) => p.slug === slug)
+  const index = PROJECT_DISPLAY_ORDER.indexOf(slug as (typeof PROJECT_DISPLAY_ORDER)[number])
+  if (index === -1) {
+    return { prev: null, next: null }
+  }
+
+  const prevSlug = index > 0 ? PROJECT_DISPLAY_ORDER[index - 1] : undefined
+  const nextSlug =
+    index < PROJECT_DISPLAY_ORDER.length - 1 ? PROJECT_DISPLAY_ORDER[index + 1] : undefined
+
   return {
-    prev: index > 0 ? projects[index - 1] : null,
-    next: index < projects.length - 1 ? projects[index + 1] : null,
+    prev: prevSlug ? (getProjectBySlug(prevSlug) ?? null) : null,
+    next: nextSlug ? (getProjectBySlug(nextSlug) ?? null) : null,
   }
 }

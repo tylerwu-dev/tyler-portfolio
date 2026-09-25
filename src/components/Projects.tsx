@@ -1,21 +1,11 @@
-import { projects } from "../data/projects"
+import { PROJECT_DISPLAY_ORDER, projects } from "../data/projects"
 import SectionWrapper from "./SectionWrapper"
 import ProjectCard from "./ProjectCard"
 import { motion } from "framer-motion"
 import { staggerContainer, fadeUp } from "./SectionWrapper"
 
-/** Homepage Selected Projects display order */
-const HOMEPAGE_ORDER = [
-  "bookapro",
-  "ask-mirra",
-  "rezo",
-  "easyrent",
-  "carshare",
-  "snowball",
-] as const
-
 export default function Projects() {
-  const orderedProjects = HOMEPAGE_ORDER.map((slug) =>
+  const orderedProjects = PROJECT_DISPLAY_ORDER.map((slug) =>
     projects.find((project) => project.slug === slug),
   ).filter((project): project is (typeof projects)[number] => project != null)
 

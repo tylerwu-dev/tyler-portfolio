@@ -5,6 +5,8 @@ import { fadeUp } from "../components/SectionWrapper"
 import Footer from "../components/Footer"
 import ScreenshotGrid from "../components/ScreenshotGrid"
 import { assetPath } from "../utils/assetPath"
+import BookaProCaseStudy from "../components/case-study/BookaProCaseStudy"
+import SnowballCaseStudy from "../components/case-study/SnowballCaseStudy"
 
 function CaseStudySection({
   title,
@@ -44,6 +46,14 @@ export default function ProjectDetail() {
 
   if (!project) {
     return <Navigate to="/" replace />
+  }
+
+  if (project.slug === "bookapro") {
+    return <BookaProCaseStudy project={project} />
+  }
+
+  if (project.slug === "snowball") {
+    return <SnowballCaseStudy project={project} />
   }
 
   const { prev, next } = getAdjacentProjects(project.slug)
