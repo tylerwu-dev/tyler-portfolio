@@ -232,24 +232,23 @@ function FeaturedLayout({
   useDeviceFrame: boolean
   liveUrl?: string
 }) {
-  const hero = screenshots.find((s) => (s.presentation ?? "default") === "default")
+  const fullWidth = screenshots.filter((s) => (s.presentation ?? "default") === "default")
   const desktopRow = screenshots.filter((s) => s.presentation === "scrollable-desktop")
   const mobileShots = screenshots.filter((s) => s.presentation === "scrollable-mobile")
-  const used = new Set(
-    [hero, ...desktopRow, ...mobileShots].filter(Boolean).map((s) => s!.title),
-  )
+  const used = new Set([...fullWidth, ...desktopRow, ...mobileShots].map((s) => s.title))
   const leftover = screenshots.filter((s) => !used.has(s.title))
 
   return (
     <div className="flex flex-col gap-10 md:gap-12">
-      {hero && (
+      {fullWidth.map((shot) => (
         <ScreenshotCard
-          shot={hero}
+          key={shot.title}
+          shot={shot}
           variant={variant}
           useDeviceFrame={false}
           imageClassName="block h-auto w-full rounded-2xl object-contain"
         />
-      )}
+      ))}
 
       {desktopRow.length > 0 && (
         <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-8">

@@ -183,7 +183,7 @@ export default function ProjectDetail() {
         </CaseStudySection>
 
         {cs.designProcess && (
-          <CaseStudySection title="From brand system to storefront">
+          <CaseStudySection title={cs.designProcess.title ?? "From brand system to storefront"}>
             <div className="space-y-6">
               <Paragraphs text={cs.designProcess.intro} />
               <div className="space-y-4">
@@ -269,9 +269,11 @@ export default function ProjectDetail() {
                   : "Screenshots"
             }
             subtitle={
-              project.screenshotLayout === "featured"
-                ? "Key storefront screens showing brand direction, responsive UI, and core commerce interactions."
-                : project.isDesignProject
+              project.screenshotSubtitle
+                ? project.screenshotSubtitle
+                : project.screenshotLayout === "featured"
+                  ? "Key storefront screens showing brand direction, responsive UI, and core commerce interactions."
+                  : project.isDesignProject
                   ? "A closer look at the main prototype screens and user flows."
                   : "A closer look at the main screens and user flows."
             }

@@ -26,6 +26,7 @@ export interface CaseStudySection {
   keyFeatures: string[]
   technicalDecisions: string[]
   designProcess?: {
+    title?: string
     intro: string | string[]
     areas: DesignProcessArea[]
   }
@@ -47,6 +48,7 @@ export interface Project {
   isDesignProject?: boolean
   screenshotVariant?: "mobile" | "web"
   screenshotLayout?: "grid" | "featured"
+  screenshotSubtitle?: string
   screenshots: ProjectScreenshot[]
   caseStudy: CaseStudySection
 }
@@ -320,6 +322,135 @@ export const projects: Project[] = [
         "Ask Mirra demonstrates my ability to build a full-stack AI web product with authentication, database logic, payment integration, responsive UI, and production deployment.",
         "The project gave me practical experience connecting AI generation with real product infrastructure, including user accounts, preview limits, Stripe Checkout, webhook-based balance updates, Firestore data management, and privacy-aware product planning.",
         "Unlike a simple AI prototype, Ask Mirra was built as a working MVP with a clear user flow and monetization structure.",
+      ],
+    },
+  },
+  {
+    id: "7",
+    slug: "novi",
+    title: "Novi",
+    type: "Full-stack business & AI website",
+    tags: ["TanStack Start", "TypeScript", "Firebase", "OpenAI"],
+    description:
+      "Designed and developed Novi’s business website and AI consultant experience, combining responsive UI/UX, full-stack implementation, and an agentic workflow for solution discovery and lead qualification.",
+    image: "/images/novi-thumbnail.png",
+    links: {
+      caseStudy: "/projects/novi",
+      live: "https://novitoronto.com",
+    },
+    featured: true,
+    screenshotVariant: "web",
+    screenshotLayout: "featured",
+    screenshotSubtitle:
+      "Selected screens from the Novi website, including the public site and the AI consultant.",
+    screenshots: [
+      {
+        title: "Desktop Homepage",
+        image: "/images/projects/novi/novi-home-desktop.png",
+        description:
+          "Business website presenting Novi’s website, app, UI/UX, and AI services.",
+      },
+      {
+        title: "AI Consultant",
+        image: "/images/projects/novi/novi-ai-consultant.png",
+        description:
+          "Conversational discovery that clarifies a visitor’s business needs before a solution direction is recommended.",
+      },
+      {
+        title: "Project Brief",
+        image: "/images/projects/novi/novi-project-brief.gif",
+        description:
+          "A structured project brief generated from the conversation, after relevant Novi knowledge is retrieved.",
+      },
+    ],
+    caseStudy: {
+      overview: [
+        "Novi is a digital solutions website designed and developed end-to-end, combining responsive UI/UX, full-stack web development, cloud deployment, and an AI-powered consultant experience.",
+        "The site presents Novi’s website, app, UI/UX, and AI services while also demonstrating how conversational AI can help turn inbound visitors into structured project opportunities.",
+        "Novi was designed to improve discoverability across web and AI search, then convert inbound visitors into structured project opportunities through an on-site conversational experience.",
+      ],
+      role: [
+        "I worked as an independent designer and full-stack developer. That included the responsive interface, the service website, and the AI consultant that sits inside it.",
+        "Novi is a digital solutions company, not a standalone lead-generation product. The consultant is one experience on the site: it helps a visitor clarify a project, then turns that conversation into a structured brief.",
+      ],
+      techStack: [
+        "TanStack Start",
+        "React",
+        "TypeScript",
+        "Cloudflare Workers",
+        "Firebase",
+        "Firestore",
+        "OpenAI API",
+      ],
+      keyFeatures: [
+        "Business website for website, app, UI/UX, and AI services",
+        "Responsive desktop and mobile UI",
+        "On-site AI consultant for solution discovery",
+        "Retrieval of relevant Novi business knowledge during the conversation",
+        "Preliminary solution or workflow recommendation",
+        "Structured project brief generated from the conversation",
+        "Lead capture only when the visitor provides contact details",
+      ],
+      designProcess: {
+        title: "From visitor inquiry to structured project brief",
+        intro:
+          "The Novi AI consultant guides visitors through a conversational discovery process, helping clarify their business needs before retrieving relevant Novi knowledge, recommending an initial solution direction, and generating a structured project brief.",
+        areas: [
+          {
+            title: "1. Discover the problem",
+            description: "The conversation starts with the visitor’s business problem and goals.",
+          },
+          {
+            title: "2. Gather project details",
+            description: "Follow-up questions collect the details needed to shape the work.",
+          },
+          {
+            title: "3. Retrieve Novi knowledge",
+            description: "Relevant Novi business knowledge is retrieved to ground the response.",
+          },
+          {
+            title: "4. Recommend a direction",
+            description: "The consultant recommends a preliminary solution or workflow.",
+          },
+          {
+            title: "5. Generate a project brief",
+            description: "The conversation is written into a structured project brief.",
+          },
+          {
+            title: "6. Capture a lead when contact details exist",
+            description:
+              "Qualified lead information is saved only when the visitor provides contact details. A conversation without contact details does not create a lead.",
+          },
+        ],
+      },
+      technicalDecisions: [
+        "Conversation handling runs on the server, with the OpenAI API called from Cloudflare Workers rather than the browser.",
+        "Firestore stores the conversation so the consultant can continue from the current state instead of starting over.",
+        "Brief creation writes a structured project record from the completed discovery flow.",
+        "Idempotency checks reduce duplicate briefs or lead records if the same step is submitted again.",
+        "Rate limiting and usage tracking keep the consultant within expected demo usage.",
+        "Demo access controls limit who can open the AI consultant.",
+        "The site is deployed on Cloudflare Workers.",
+      ],
+      challenges: [
+        {
+          title: "A conversation is not automatically a lead",
+          challenge:
+            "Visitors can finish discovery without sharing an email or other contact details.",
+          solution:
+            "The flow can still produce a structured brief. Lead information is stored only when contact details are provided.",
+        },
+        {
+          title: "Repeated submissions",
+          challenge:
+            "Refreshing or sending the same step again could create duplicate briefs or lead records.",
+          solution:
+            "Idempotency safeguards tie the write to the existing conversation so the same step does not create a second record.",
+        },
+      ],
+      finalResult: [
+        "Novi shows end-to-end work on a digital solutions website: responsive UI, full-stack implementation, and an AI consultant that turns a visitor inquiry into a structured project brief.",
+        "The consultant supports solution discovery inside the site. It does not replace Novi’s website, app, UI/UX, and AI services, and it does not record a lead unless the visitor shares contact details.",
       ],
     },
   },
@@ -906,9 +1037,10 @@ export function getProjectBySlug(slug: string): Project | undefined {
 export const PROJECT_DISPLAY_ORDER = [
   "bookapro",
   "ask-mirra",
+  "novi",
   "rezo",
-  "snowball",
   "easyrent",
+  "snowball",
   "carshare",
 ] as const
 
